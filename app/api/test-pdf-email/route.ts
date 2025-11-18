@@ -33,7 +33,7 @@ export async function GET(req: Request) {
       attachments: [{
         content: Buffer.from(pdfBuffer).toString('base64'),
         filename: 'test-report.pdf',
-        type: 'application/pdf'
+        contentType: 'application/pdf'
       }]
     });
 
