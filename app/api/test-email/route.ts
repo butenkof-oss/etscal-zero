@@ -9,7 +9,7 @@ export async function GET(req: Request) {
 
   const msg = {
     to: email,
-    from: 'noreply@etscal-zero.vercel.app',
+    from: 'butenkof@gmail.com', // Используй свой email, подтвержденный в SendGrid
     subject: 'EtsyCalc Test Email',
     text: 'Если это письмо пришло — SendGrid работает!',
     html: '<strong>Если это письмо пришло — SendGrid работает!</strong>'

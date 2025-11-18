@@ -9,12 +9,18 @@ interface PaymentModalProps {
 export default function PaymentModal({ amount, onSuccess }: PaymentModalProps) {
   const [processing, setProcessing] = useState(false);
 
-  const handlePayment = async () => {
+  const handlePayment = () => {
     setProcessing(true);
-    setTimeout(() => {
-      setProcessing(false);
-      onSuccess();
-    }, 2000);
+    
+    // Генерируем ссылку на ЮMoney
+    const wallet = '4100118602371960';
+    const email = localStorage.getItem('ecalc_email') || 'user@example.com';
+    const comment = `EtsyCalc PDF ${email}`;
+    
+    const paymentUrl = `https://yoomoney.ru/to/${wallet}?sum=${amount}&comment=${encodeURIComponent(comment)}`;
+    
+    // Редирект на ЮMoney
+    window.location.href = paymentUrl;
   };
 
   return (
