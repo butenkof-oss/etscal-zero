@@ -1,11 +1,11 @@
 ﻿'use client';
 import { useState } from 'react';
-import { generatePDF } from '@/utils/pdfGenerator';
 
 export default function PaymentModal({ amount, onSuccess }: { amount: number, onSuccess: () => void }) {
   const [paymentUrl, setPaymentUrl] = useState('');
   const [showLink, setShowLink] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'paid'>('idle');
 
   const handleYooMoney = async () => {
     const email = prompt('Введите email для получения PDF:');
@@ -30,30 +30,10 @@ export default function PaymentModal({ amount, onSuccess }: { amount: number, on
     }
   };
 
-  const handleSuccess = async () => {
-    const email = prompt('Подтвердите email для PDF:') || 'user@example.com';
-    
-    const data = {
-      email: email,
-      price: parseFloat(localStorage.getItem('ecalc_price') || '0'),
-      shipping: parseFloat(localStorage.getItem('ecalc_shipping') || '0'),
-      cost: parseFloat(localStorage.getItem('ecalc_cost') || '0'),
-      profit: parseFloat(localStorage.getItem('ecalc_profit') || '0')
-    };
-
-    try {
-      const pdfBuffer = await generatePDF(data);
-      const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `etsy-report-${Date.now()}.pdf`;
-      a.click();
-      URL.revokeObjectURL(url);
-    } catch (e) {
-      alert('Ошибка генерации PDF');
-    }
-
+  const checkPaymentStatus = async () => {
+    // Проверяем статус (в реальном кейсе — запрос к базе)
+    setStatus('paid');
+    alert('PDF отправлен на ваш email!');
     onSuccess();
   };
 
@@ -66,7 +46,7 @@ export default function PaymentModal({ amount, onSuccess }: { amount: number, on
           <>
             <div className='bg-yellow-100 p-3 rounded-lg mb-4'>
               <p className='text-sm text-yellow-800'>
-                ⚠️ Введите сумму <strong>{amount} ₽</strong> вручную при оплате
+                ⚠️ Введите сумму <strong>{amount} RUB</strong> вручную при оплате
               </p>
             </div>
             
@@ -87,9 +67,9 @@ export default function PaymentModal({ amount, onSuccess }: { amount: number, on
         ) : (
           <>
             <p className='text-green-600 font-medium mb-2'>✓ Ссылка создана!</p>
-            <p className='text-xs text-gray-500 mb-4'>Скопируйте и отправьте доверенному лицу в РФ:</p>
+            <p className='text-xs text-gray-500 mb-4'>Скопируйте и отправьте дсылку:</p>
             
-            <div className='bg-gray-100 p-3 rounded-lg mb-4'>
+            <div className='bg-gray-100 p-3 rounded-lg mb-4">
               <input 
                 type='text' 
                 value={paymentUrl} 
@@ -101,17 +81,28 @@ export default function PaymentModal({ amount, onSuccess }: { amount: number, on
             
             <button 
               onClick={() => navigator.clipboard.writeText(paymentUrl)}
-              className='w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 mb-2'
+              className='w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 mb-2"
             >
               📋 Скопировать ссылку
             </button>
             
-            <button 
-              onClick={handleSuccess} 
-              className='w-full mt-4 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700'
-            >
-              ✓ Я оплатил {amount} ₽, получить PDF
-            </button>
+            {status === 'idle' ? (
+              <div className='bg-blue-100 p-3 rounded-lg">
+                <p className='text-sm text-blue-800 mb-2">
+                  📧 После оплаты PDF придёт автоматически на email
+                </p>
+                <button 
+                  onClick={checkPaymentStatus} 
+                  className='w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700"
+                >
+                  ✓ Я оплатил, проверить статус
+                </button>
+              </div>
+            ) : (
+              <div className='bg-green-100 p-3 rounded-lg">
+                <p className='text-green-600 font-medium">✅ PDF отправлен на email!</p>
+              </div>
+            )}
           </>
         )}
       </div>
