@@ -17,7 +17,7 @@ export async function GET(req: Request) {
 
   try {
     await sgMail.send(msg);
-    return NextResponse.json({ success: true, message: Email отправлен на  });
+    return NextResponse.json({ success: true, message: `Email отправлен на ${email}` });
   } catch (error: any) {
     console.error('SendGrid error:', error);
     return NextResponse.json({ success: false, error: error?.message || 'Unknown error' }, { status: 500 });

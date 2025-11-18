@@ -11,7 +11,6 @@ export default function PaymentModal({ amount, onSuccess }: PaymentModalProps) {
 
   const handlePayment = async () => {
     setProcessing(true);
-    // Здесь будет логика оплаты
     setTimeout(() => {
       setProcessing(false);
       onSuccess();
