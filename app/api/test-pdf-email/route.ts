@@ -31,10 +31,11 @@ export async function GET(req: Request) {
       subject: 'EtsyCalc PDF Отчет (ТЕСТ)',
       text: 'Это тестовый PDF без реальной оплаты',
       attachments: [{
-        content: Buffer.from(pdfBuffer).toString('base64'),
-        filename: 'test-report.pdf',
-        contentType: 'application/pdf'
-      }]
+  content: Buffer.from(pdfBuffer).toString('base64'),
+  filename: 'test-report.pdf',
+  contentType: 'application/pdf',
+  encoding: 'base64' // ДОБАВЛЯЕМ ЭТУ СТРОЧКУ
+}]
     });
 
     return NextResponse.json({ 
