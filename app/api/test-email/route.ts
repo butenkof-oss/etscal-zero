@@ -11,13 +11,13 @@ export async function GET(req: Request) {
     to: email,
     from: 'noreply@etscal-zero.vercel.app',
     subject: 'EtsyCalc Test Email',
-    text: 'Если это письмо пришло — SendGrid работает!',
-    html: '<strong>Если это письмо пришло — SendGrid работает!</strong>'
+    text: 'Р•СЃР»Рё СЌС‚Рѕ РїРёСЃСЊРјРѕ РїСЂРёС€Р»Рѕ вЂ” SendGrid СЂР°Р±РѕС‚Р°РµС‚!',
+    html: '<strong>Р•СЃР»Рё СЌС‚Рѕ РїРёСЃСЊРјРѕ РїСЂРёС€Р»Рѕ вЂ” SendGrid СЂР°Р±РѕС‚Р°РµС‚!</strong>'
   };
 
   try {
     await sgMail.send(msg);
-    return NextResponse.json({ success: true, message: Email отправлен на  });
+    return NextResponse.json({ success: true, message: Email РѕС‚РїСЂР°РІР»РµРЅ РЅР°  });
   } catch (error) {
     console.error('SendGrid error:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
